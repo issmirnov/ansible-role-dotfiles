@@ -4,7 +4,7 @@
   stat: "path={{ dotfiles_target_dir }}"
   register: dotfiles_installed
 
-## install dotfiles if they don't exist.
+# install dotfiles if they don't exist.
 - name: Clone dotfiles from {{ dotfiles_repo_url }}
   git:
     repo: "{{ dotfiles_repo_url }}"

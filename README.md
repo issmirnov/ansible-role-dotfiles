@@ -16,7 +16,7 @@ dotfiles_target_dir: ~/.dotfiles
 dotfiles_install_command: chmod +x install && ./install && reset
 dotfiles_update: yes # pull in latest changes
 dotfiles_update_command: git pull
-dotfiles_update_submodules: yes # if your dotfiles have submodules, enable updates.
+dotfiles_update_submodules: yes
 ```
 
 ## Example Playbook
