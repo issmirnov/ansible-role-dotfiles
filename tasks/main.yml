@@ -1,0 +1,26 @@
+---
+# check if dotfiles exist.
+- name: See if dotfiles are installed at {{ dotfiles_target_dir }}
+  stat: "path={{ dotfiles_target_dir }}"
+  register: dotfiles_installed
+
+## install dotfiles if they don't exist.
+- name: Clone dotfiles from {{ dotfiles_repo_url }}
+  git:
+    repo: "{{ dotfiles_repo_url }}"
+    dest: "{{ dotfiles_target_dir }}"
+    accept_hostkey: yes
+  when: not dotfiles_installed.stat.exists
+
+- name: install dotfiles to {{ dotfiles_target_dir }}
+  shell: "{{ dotfiles_install_command }} chdir={{ dotfiles_target_dir }}"
+  when: not dotfiles_installed.stat.exists
+
+# if dotfiles exist, update them. pull repo and update submodules.
+- name: update dotfiles
+  command: "{{ dotfiles_update_command }} chdir={{ dotfiles_target_dir }}"
+  when: dotfiles_installed.stat.exists
+
+- name: update dotfile submodules
+  command: git submodule update chdir="{{ dotfiles_target_dir }}"
+  when: dotfiles_installed.stat.exists and {{ dotfiles_update_submodules }}

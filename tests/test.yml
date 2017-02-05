@@ -1,0 +1,6 @@
+---
+- name: Test dotfiles deployment.
+  hosts: localhost
+  remote_user: root
+  roles:
+    - issmirnov.dotfiles

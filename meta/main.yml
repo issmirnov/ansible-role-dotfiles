@@ -1,0 +1,28 @@
+galaxy_info:
+  author: Ivan Smirnov
+  description:  Generic git dotfiles installer.
+  license: MIT
+
+  platforms:
+  - name: Fedora
+    versions:
+    - all
+  - name: MacOSX
+    versions:
+    - all
+  - name: GenericLinux
+    versions:
+    - any
+  - name: ArchLinux
+    versions:
+    - all
+    - any
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+
+  galaxy_tags:
+    - dotfiles
