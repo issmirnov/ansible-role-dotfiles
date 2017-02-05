@@ -11,11 +11,12 @@ A valid dotfiles repo with a single install command.
 ## Role Variables
 
 ```
-dotfiles_repo_url:
-dotfiles_target_dir:
-dotfiles_install_command:
+dotfiles_repo_url: https://github.com/issmirnov/dotfiles.git
+dotfiles_target_dir: ~/.dotfiles
+dotfiles_install_command: chmod +x install && ./install && reset
 dotfiles_update: yes # pull in latest changes
 dotfiles_update_command: git pull
+dotfiles_update_submodules: yes # if your dotfiles have submodules, enable updates.
 ```
 
 ## Example Playbook
@@ -24,6 +25,7 @@ dotfiles_update_command: git pull
 - hosts: servers
   vars:
     dotfiles_repo_url: https://github.com/username/dotfiles.git
+    dotfiles_install_command: install.sh
   roles:
     - { role: issmirnov.dotfiles}
 ```
