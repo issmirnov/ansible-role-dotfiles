@@ -10,6 +10,7 @@ addons:
   apt:
     packages:
     - python-pip
+    - zsh
 
 install:
   # Install ansible
@@ -24,6 +25,17 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+
+  # first run
+  - ansible-playbook tests/test.yml -i tests/inventory test.yml
+
+  # second run, check idempotence
+  - >
+    ansible-playbook tests/test.yml -i tests/inventory test.yml
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
