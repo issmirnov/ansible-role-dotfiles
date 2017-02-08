@@ -1,7 +1,7 @@
 ---
 dotfiles_repo_url: https://github.com/issmirnov/dotfiles.git
 dotfiles_target_dir: ~/.dotfiles
-dotfiles_install_command: ./install; reset 
+dotfiles_install_command: ./install 
 dotfiles_update: yes # pull in latest changes
 dotfiles_update_command: git pull
 dotfiles_update_submodules: yes # if your dotfiles have submodules, enable updates.
