@@ -25,6 +25,6 @@
 
 - name: update dotfile submodules
   command: git submodule update chdir="{{ dotfiles_target_dir }}"
-  when: dotfiles_installed.stat.exists and {{ dotfiles_update_submodules }}
+  when: dotfiles_installed.stat.exists and dotfiles_update_submodules
   register: dotfiles_submodule_update
   changed_when: '"checked out" in dotfiles_submodule_update.stdout'
