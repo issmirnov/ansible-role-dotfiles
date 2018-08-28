@@ -18,6 +18,10 @@
       when: ansible_os_family == 'Debian'
       changed_when: false # for idempotency
       
+    - name: break idempotency
+      shell: ls
+      changed_when: true
+      
     - name: install deps
       package:
         name: "{{ item }}"
