@@ -21,7 +21,7 @@
   command: "{{ dotfiles_update_command }} chdir={{ dotfiles_target_dir }}"
   when: dotfiles_installed.stat.exists
   register: dotfiles_update
-  changed_when: "'Already up-to-date.' not in dotfiles_update.stdout_lines"
+  changed_when: "'Already' not in dotfiles_update.stdout"
 
 - name: update dotfile submodules
   command: git submodule update chdir="{{ dotfiles_target_dir }}"

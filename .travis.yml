@@ -1,40 +1,26 @@
 ---
-language: python
-python: "2.7"
+go:
+  - 1.10
+python:
+  - 2.7
 
-# Use the new container infrastructure
-sudo: false
+services: docker
 
-# Install ansible
-addons:
-  apt:
-    packages:
-    - python-pip
-    - zsh
+env:
+  - distro: ubuntu1604
+  - distro: ubuntu1804
+  - distro: centos7
+  - distro: debian10
 
-install:
-  # Install ansible
-  - pip install ansible
-
-  # Check ansible version
-  - ansible --version
-
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+before_install:
+  - go get -v github.com/fubarhouse/ansible-role-tester
 
 script:
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+  - ansible-role-tester full --distribution ${distro} --destination /etc/ansible/roles/$(basename $(pwd)) 
 
-  # first run
-  - ansible-playbook tests/test.yml -i tests/inventory --connection=local
-
-  # second run, verify idempotency
-  - >
-    ansible-playbook tests/test.yml -i tests/inventory --connection=local
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Update test: pass' && exit 0)
-    || (echo 'Update test: fail' && exit 1)
-
+# rerun test with verbose logs
+after_failure:
+  - ansible-role-tester full --distribution ${distro} --destination /etc/ansible/roles/$(basename $(pwd)) --verbose
+  
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
