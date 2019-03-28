@@ -6,6 +6,12 @@ python:
 
 services: docker
 
+addons:
+  apt:
+    packages:
+      - curl
+      - jq
+
 env:
   - distro: ubuntu1604
   - distro: ubuntu1804
@@ -14,6 +20,9 @@ env:
 
 before_install:
   - go get -v github.com/fubarhouse/ansible-role-tester
+  - U=$(curl https://github.cache.smirnov.cloud/repos/sharkdp/bat/releases/latest | jq -r -c 'first(.assets[] | select(.browser_download_url | contains("amd64"))) | .browser_download_url')
+  - wget $U # download bat.deb
+  - sudo dpkg -i $(basename $U) # install bat.
 
 script:
   - ansible-role-tester full --distribution ${distro} --destination /etc/ansible/roles/$(basename $(pwd)) 

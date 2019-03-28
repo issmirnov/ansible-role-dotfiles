@@ -17,14 +17,43 @@
         update_cache: yes
       when: ansible_os_family == 'Debian'
       changed_when: false # for idempotency
-      
+
     - name: install deps
       package:
-        name: "{{ item }}"
+        name:
+          - vim
+          - git
+          - zsh
+          - jq
+          - curl
         state: present
-      with_items:
-        - vim
-        - git
-        - zsh
+
+    # test only asset, since docker ships with minimal images
+    - name: ensure '~/.cache' directory present
+      file:
+        path: "{{ ansible_user_dir }}/.cache"
+        state: directory
+
+
+    - name: get bat url
+      shell: "curl https://github.cache.smirnov.cloud/repos/sharkdp/bat/releases/latest | jq -r -c 'first(.assets[] | select(.browser_download_url | contains(\"musl.tar.gz\"))) | .browser_download_url'"
+      args:
+        warn: no # we are using curl deliberately here
+      register: bat_url
+      changed_when: false # for idempotency
+
+    - name: install bat
+      unarchive:
+        src: "{{ bat_url.stdout }}"
+        dest: /usr/local/bin
+        extra_opts: "--strip-components=1"
+        creates: "/usr/local/bin/bat"
+        remote_src: yes
+        exclude:
+          - LICENSE-APACHE
+          - LICENSE-MIT
+          - README.md
+          - autocomplete
+          - bat.1
   roles:
       - ansible-role-dotfiles
